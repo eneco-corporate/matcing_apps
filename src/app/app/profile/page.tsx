@@ -24,9 +24,15 @@ export default function ProfilePage() {
     setLocale(locale === 'ja' ? 'en' : 'ja');
   };
 
-  const handleLogout = () => {
-    // TODO: Implement logout
-    console.log('Logout');
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', {
+        method: 'POST',
+      });
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
