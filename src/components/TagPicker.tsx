@@ -46,7 +46,7 @@ export default function TagPicker({
       <div className="flex flex-wrap gap-2">
         {options.map((tag) => {
           const isSelected = selected.includes(tag);
-          const isDisabled = maxSelections && selected.length >= maxSelections && !isSelected;
+          const isDisabled = !!(maxSelections && selected.length >= maxSelections && !isSelected);
 
           return (
             <button

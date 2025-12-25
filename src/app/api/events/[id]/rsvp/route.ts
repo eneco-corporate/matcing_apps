@@ -28,13 +28,15 @@ export async function POST(
       );
     }
 
-    // Check if user is a member of the group
-    const isMember = event.group.members.some(m => m.userId === user.id && m.isActive);
-    if (!isMember) {
-      return NextResponse.json(
-        { error: 'このグループのメンバーではありません' },
-        { status: 403 }
-      );
+    // Check if user is a member of the group (if event has a group)
+    if (event.group) {
+      const isMember = event.group.members.some(m => m.userId === user.id && m.isActive);
+      if (!isMember) {
+        return NextResponse.json(
+          { error: 'このグループのメンバーではありません' },
+          { status: 403 }
+        );
+      }
     }
 
     // Create or update RSVP

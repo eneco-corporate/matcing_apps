@@ -83,9 +83,11 @@ export default async function EventDetailPage({
               <h1 className="text-3xl font-bold text-neutral-900 mb-2">
                 {event.title}
               </h1>
-              <p className="text-lg text-neutral-600">
-                {event.group.cohortName}
-              </p>
+              {event.group && (
+                <p className="text-lg text-neutral-600">
+                  {event.group.cohortName}
+                </p>
+              )}
             </div>
             <div className={`px-3 py-1 rounded-full text-sm font-medium ${
               event.status === 'SCHEDULED' ? 'bg-blue-100 text-blue-800' :
@@ -191,11 +193,13 @@ export default async function EventDetailPage({
 
           {isConfirmed && !isPast && (
             <div className="space-y-4">
-              <Link href={`/chat/${event.group.id}`}>
-                <Button fullWidth size="lg" variant="outline">
-                  グループチャットを開く
-                </Button>
-              </Link>
+              {event.group && (
+                <Link href={`/chat/${event.group.id}`}>
+                  <Button fullWidth size="lg" variant="outline">
+                    グループチャットを開く
+                  </Button>
+                </Link>
+              )}
               {!userRsvp?.checkedIn && (
                 <Button fullWidth size="lg">
                   チェックイン

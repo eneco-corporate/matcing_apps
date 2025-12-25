@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import Button from '@/components/Button';
-import Card from '@/components/Card';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 
 export default function LandingPage() {
   return (
@@ -16,14 +16,16 @@ export default function LandingPage() {
             少人数グループで安心して出会える、女性限定の友達マッチングアプリ
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth">
+            <Link href="/app">
               <Button size="lg" className="min-w-[200px]">
-                始める
+                アプリを開く
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="min-w-[200px]">
-              詳しく見る
-            </Button>
+            <Link href="/admin">
+              <Button size="lg" variant="outline" className="min-w-[200px]">
+                管理画面
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -147,9 +149,9 @@ export default function LandingPage() {
           <p className="text-xl mb-8 text-primary-50">
             今すぐ登録して、素敵な出会いを始めましょう
           </p>
-          <Link href="/auth">
+          <Link href="/app">
             <Button size="lg" variant="secondary" className="min-w-[200px]">
-              無料で始める
+              アプリを開く
             </Button>
           </Link>
         </div>

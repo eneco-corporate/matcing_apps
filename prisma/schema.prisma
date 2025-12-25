@@ -64,6 +64,7 @@ model Verification {
   status            String              @default("UNVERIFIED")
   idImagePath       String?
   selfieImagePath   String?
+  photoImagePath    String?             // Additional photo for gender verification
 
   submittedAt       DateTime?
   reviewedAt        DateTime?
@@ -146,12 +147,57 @@ model GroupMember {
   @@index([userId])
 }
 
+model EventSeries {
+  id                String    @id @default(cuid())
+  name              String
+  description       String?
+  imageUrl          String?
+
+  totalEvents       Int       @default(7)
+  isPaid            Boolean   @default(false)
+  price             Int?      // in yen
+
+  startDate         DateTime?
+  endDate           DateTime?
+
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  events            Event[]
+  enrollments       SeriesEnrollment[]
+
+  @@index([isActive])
+  @@index([startDate])
+}
+
+model SeriesEnrollment {
+  id                String        @id @default(cuid())
+  userId            String
+  seriesId          String
+  series            EventSeries   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  currentEventIndex Int           @default(0)
+  status            String        @default("ACTIVE") // ACTIVE, COMPLETED, DROPPED
+
+  enrolledAt        DateTime      @default(now())
+  completedAt       DateTime?
+
+  @@unique([userId, seriesId])
+  @@index([userId])
+  @@index([seriesId])
+  @@index([status])
+}
+
 model Event {
   id                String        @id @default(cuid())
-  groupId           String
-  group             Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId           String?
+  group             Group?        @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  seriesId          String?
+  series            EventSeries?  @relation(fields: [seriesId], references: [id], onDelete: SetNull)
 
   weekNumber        Int
+  seriesOrder       Int?          // Order within series (0-based)
   status            String        @default("SCHEDULED")
 
   scheduledAt       DateTime
@@ -161,6 +207,7 @@ model Event {
 
   title             String
   description       String?
+  imageUrl          String?
 
   createdAt         DateTime      @default(now())
   updatedAt         DateTime      @updatedAt
@@ -172,6 +219,7 @@ model Event {
   promptAssignments EventPromptAssignment[]
 
   @@index([groupId])
+  @@index([seriesId])
   @@index([status])
   @@index([scheduledAt])
 }
