@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { CompactEventCard } from '@/components/ui/EventCard';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
@@ -44,17 +45,19 @@ export default function HomePage() {
       />
 
       {/* Can't Make It Card */}
-      <Card padding="md">
-        <div className="flex items-center justify-between">
-          <span className="text-body text-neutral-700">
-            {t('home.cantMakeIt', locale)}
-          </span>
-          <Button variant="ghost" size="sm">
-            {t('home.change', locale)}
-            <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
-        </div>
-      </Card>
+      <Link href={`/app/events/${mockUpcomingEvent.id}`}>
+        <Card padding="md">
+          <div className="flex items-center justify-between">
+            <span className="text-body text-neutral-700">
+              {t('home.cantMakeIt', locale)}
+            </span>
+            <Button variant="ghost" size="sm">
+              {t('home.change', locale)}
+              <ChevronRight className="w-4 h-4 ml-1" />
+            </Button>
+          </div>
+        </Card>
+      </Link>
 
       {/* Personality Test Section */}
       <div className="space-y-3">
@@ -70,9 +73,11 @@ export default function HomePage() {
             <p className="text-body-lg text-neutral-900">
               {t('home.whatIsYourType', locale)}
             </p>
-            <Button variant="primary" fullWidth>
-              {t('home.takeDiagnostic', locale)}
-            </Button>
+            <Link href="/app/personality-test">
+              <Button variant="primary" fullWidth>
+                {t('home.takeDiagnostic', locale)}
+              </Button>
+            </Link>
           </div>
         </Card>
       </div>
@@ -80,39 +85,45 @@ export default function HomePage() {
       {/* Action Cards */}
       <div className="space-y-3">
         {/* Confirm Attendance */}
-        <Card padding="md">
-          <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-body font-medium text-neutral-900">
-                  {t('home.confirmAttendance', locale)}
-                </span>
-                <Badge variant="error">{t('home.unconfirmed', locale)}</Badge>
+        <Link href={`/app/events/${mockUpcomingEvent.id}`}>
+          <Card padding="md">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-body font-medium text-neutral-900">
+                    {t('home.confirmAttendance', locale)}
+                  </span>
+                  <Badge variant="error">{t('home.unconfirmed', locale)}</Badge>
+                </div>
               </div>
+              <ChevronRight className="w-5 h-5 text-neutral-400" />
             </div>
-            <ChevronRight className="w-5 h-5 text-neutral-400" />
-          </div>
-        </Card>
+          </Card>
+        </Link>
 
         {/* Add Introduction */}
-        <Card padding="md">
-          <div className="flex items-center justify-between">
-            <span className="text-body font-medium text-neutral-900">
-              {t('home.addIntro', locale)}
-            </span>
-            <ChevronRight className="w-5 h-5 text-neutral-400" />
-          </div>
-        </Card>
+        <Link href="/app/profile">
+          <Card padding="md">
+            <div className="flex items-center justify-between">
+              <span className="text-body font-medium text-neutral-900">
+                {t('home.addIntro', locale)}
+              </span>
+              <ChevronRight className="w-5 h-5 text-neutral-400" />
+            </div>
+          </Card>
+        </Link>
 
         {/* Invite Friend */}
-        <Card padding="md">
-          <div className="flex items-center justify-between">
-            <span className="text-body font-medium text-neutral-900">
-              {t('home.inviteFriend', locale)}
-            </span>
-            <ChevronRight className="w-5 h-5 text-neutral-400" />
-          </div>
-        </Card>
+        <Link href="/app/profile">
+          <Card padding="md">
+            <div className="flex items-center justify-between">
+              <span className="text-body font-medium text-neutral-900">
+                {t('home.inviteFriend', locale)}
+              </span>
+              <ChevronRight className="w-5 h-5 text-neutral-400" />
+            </div>
+          </Card>
+        </Link>
       </div>
     </div>
   );

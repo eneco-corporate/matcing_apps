@@ -7,28 +7,14 @@ import { useLocale } from '@/contexts/LocaleContext';
 import { t } from '@/lib/i18n';
 import { MessageCircle } from 'lucide-react';
 
-// Mock data
+// Mock data - replace with real chat thread ID from database
 const mockChats = [
   {
-    id: '1',
+    id: 'cmjkud3ql0012v7kgwwzssuof', // Real chat thread ID
     name: '1月コホート・グループA',
-    lastMessage: 'こんにちは！次のイベント楽しみですね',
-    lastMessageTime: new Date('2026-01-06T15:30:00'),
-    unreadCount: 3,
-  },
-  {
-    id: '2',
-    name: '1月コホート・グループB',
-    lastMessage: 'みんな渋谷に集合ですか？',
-    lastMessageTime: new Date('2026-01-05T18:20:00'),
+    lastMessage: 'メッセージを送信してチャットを開始',
+    lastMessageTime: new Date(),
     unreadCount: 0,
-  },
-  {
-    id: '3',
-    name: '12月卒業生',
-    lastMessage: '次の再会イベントいつですか？',
-    lastMessageTime: new Date('2026-01-03T12:15:00'),
-    unreadCount: 1,
   },
 ];
 
