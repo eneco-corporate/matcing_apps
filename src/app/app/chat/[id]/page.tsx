@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { useLocale } from '@/contexts/LocaleContext';
@@ -43,8 +43,8 @@ const mockMessages = [
   },
 ];
 
-export default function ChatThreadPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function ChatThreadPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const { locale } = useLocale();
   const [message, setMessage] = useState('');
 

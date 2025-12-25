@@ -111,12 +111,6 @@ export default function LoginPage() {
               </Link>
             </p>
           </div>
-
-          <div className="mt-4 text-center">
-            <p className="text-body-sm text-neutral-600">
-              テスト用アカウント: yuki@example.com / password123
-            </p>
-          </div>
         </Card>
 
         <div className="mt-6 text-center">

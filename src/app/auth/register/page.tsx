@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { Upload } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,6 +16,10 @@ export default function RegisterPage() {
     nickname: '',
     birthYear: '',
   });
+  const [idImage, setIdImage] = useState<File | null>(null);
+  const [idImagePreview, setIdImagePreview] = useState<string>('');
+  const [selfieImage, setSelfieImage] = useState<File | null>(null);
+  const [selfieImagePreview, setSelfieImagePreview] = useState<string>('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +28,30 @@ export default function RegisterPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleIdImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIdImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setIdImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSelfieImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelfieImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelfieImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -49,9 +78,20 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!idImage) {
+      setError('身分証明書の画像をアップロードしてください');
+      return;
+    }
+
+    if (!selfieImage) {
+      setError('セルフィー画像をアップロードしてください');
+      return;
+    }
+
     setLoading(true);
 
     try {
+      // First, create the account
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -70,6 +110,20 @@ export default function RegisterPage() {
       if (!response.ok) {
         setError(data.error || '登録に失敗しました');
         return;
+      }
+
+      // Then upload verification images
+      const formDataUpload = new FormData();
+      formDataUpload.append('idImage', idImage);
+      formDataUpload.append('selfieImage', selfieImage);
+
+      const uploadResponse = await fetch('/api/verification/submit', {
+        method: 'POST',
+        body: formDataUpload,
+      });
+
+      if (!uploadResponse.ok) {
+        console.error('Failed to upload verification images');
       }
 
       // Success - redirect to app
@@ -187,7 +241,86 @@ export default function RegisterPage() {
               />
             </div>
 
-            <div className="pt-2">
+            {/* ID Image Upload */}
+            <div>
+              <label className="block text-body-sm font-medium text-neutral-700 mb-2">
+                身分証明書の画像 *
+              </label>
+              <p className="text-caption text-neutral-600 mb-3">
+                運転免許証、またはパスポートをアップロードしてください
+              </p>
+              <div className="relative">
+                <input
+                  id="idImage"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleIdImageChange}
+                  className="hidden"
+                  required
+                />
+                <label
+                  htmlFor="idImage"
+                  className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-neutral-300 rounded-xl hover:border-primary cursor-pointer transition-colors bg-neutral-50"
+                >
+                  {idImagePreview ? (
+                    <img
+                      src={idImagePreview}
+                      alt="ID preview"
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <Upload className="w-8 h-8 text-neutral-400 mb-2" />
+                      <span className="text-body-sm text-neutral-600">
+                        タップして画像を選択
+                      </span>
+                    </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            {/* Selfie Image Upload */}
+            <div>
+              <label className="block text-body-sm font-medium text-neutral-700 mb-2">
+                セルフィー（本人確認）*
+              </label>
+              <p className="text-caption text-neutral-600 mb-3">
+                身分証明書と一緒にあなたの顔がはっきり見える写真を撮影してください
+              </p>
+              <div className="relative">
+                <input
+                  id="selfieImage"
+                  type="file"
+                  accept="image/*"
+                  capture="user"
+                  onChange={handleSelfieImageChange}
+                  className="hidden"
+                  required
+                />
+                <label
+                  htmlFor="selfieImage"
+                  className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-neutral-300 rounded-xl hover:border-primary cursor-pointer transition-colors bg-neutral-50"
+                >
+                  {selfieImagePreview ? (
+                    <img
+                      src={selfieImagePreview}
+                      alt="Selfie preview"
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center">
+                      <Upload className="w-8 h-8 text-neutral-400 mb-2" />
+                      <span className="text-body-sm text-neutral-600">
+                        タップして写真を撮影
+                      </span>
+                    </div>
+                  )}
+                </label>
+              </div>
+            </div>
+
+            <div className="pt-2 text-white">
               <Button
                 type="submit"
                 variant="primary"

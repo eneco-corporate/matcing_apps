@@ -1,6 +1,4 @@
 'use client';
-
-import { use } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Button } from '@/components/ui/Button';
 import { DateBadge, StatusBadge } from '@/components/ui/Badge';
@@ -56,8 +54,8 @@ const mockEvent = {
   `,
 };
 
-export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+export default function EventDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
   const { locale } = useLocale();
 
   return (

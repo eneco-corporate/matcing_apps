@@ -17,23 +17,14 @@ export default function LandingPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/register">
-              <Button size="lg" className="min-w-[200px]">
-                無料で始める
+              <Button size="lg" className="min-w-[200px] text-white">
+                会員登録
               </Button>
             </Link>
             <Link href="/auth/login">
               <Button size="lg" variant="outline" className="min-w-[200px]">
                 ログイン
               </Button>
-            </Link>
-          </div>
-          <div className="mt-4 flex flex-wrap gap-3 justify-center text-sm">
-            <Link href="/app" className="text-neutral-600 hover:text-neutral-900 underline">
-              アプリを見る
-            </Link>
-            <span className="text-neutral-400">•</span>
-            <Link href="/admin" className="text-neutral-600 hover:text-neutral-900 underline">
-              管理画面
             </Link>
           </div>
         </div>
@@ -159,8 +150,8 @@ export default function LandingPage() {
             今すぐ登録して、素敵な出会いを始めましょう
           </p>
           <Link href="/auth/register">
-            <Button size="lg" variant="secondary" className="min-w-[200px]">
-              無料で始める
+            <Button size="lg" variant="secondary" className="min-w-[200px] text-black">
+              会員登録
             </Button>
           </Link>
         </div>

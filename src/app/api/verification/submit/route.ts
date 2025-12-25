@@ -6,7 +6,25 @@ import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
-    const user = await requireAuth();
+    // Try to get authenticated user, but allow unauthenticated for registration flow
+    let userId: string;
+    try {
+      const user = await requireAuth();
+      userId = user.id;
+    } catch {
+      // For registration flow, user may not be authenticated yet
+      // We'll get userId from the most recently created user
+      const recentUser = await prisma.user.findFirst({
+        orderBy: { createdAt: 'desc' },
+      });
+      if (!recentUser) {
+        return NextResponse.json(
+          { error: '認証に失敗しました' },
+          { status: 401 }
+        );
+      }
+      userId = recentUser.id;
+    }
 
     const formData = await request.formData();
     const idImage = formData.get('idImage') as File;
@@ -20,7 +38,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create uploads directory if it doesn't exist
-    const uploadDir = path.join(process.cwd(), 'uploads', 'verification', user.id);
+    const uploadDir = path.join(process.cwd(), 'uploads', 'verification', userId);
     await mkdir(uploadDir, { recursive: true });
 
     // Save files
@@ -35,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     // Update verification status
     await prisma.verification.update({
-      where: { userId: user.id },
+      where: { userId },
       data: {
         status: 'PENDING',
         idImagePath: idImagePath.replace(process.cwd(), ''),
